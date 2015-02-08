@@ -39,6 +39,10 @@ and so on. Some common approaches include:
 * Ditching `example_server.js` and integrating with a server that does
   authentication, like through passport. This is what we do at Mapbox.
 
+If you run this on anything but a `localhost`, it's really best practice
+to **create a read-only user**, since this is an interface for doing analysis
+that should not have permissions to modify data.
+
 ## Charts
 
 `stickshift` automatically creates charts for applicable queries: those
