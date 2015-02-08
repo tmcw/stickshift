@@ -26,3 +26,14 @@ hosted.
 and [React-Router](https://github.com/rackt/react-router). It's written
 in CommonJS & ES6 and cross-compiled with [browserify](http://browserify.org/)
 & [6to5](https://6to5.org/). Query storage is powered by [hubdb](http://github.com/mapbox/hubdb).
+
+## Charts
+
+`stickshift` automatically creates charts for applicable queries: those
+that
+
+* Have a column parseable as dates
+* Have at least one other column of numbers
+
+These charts are rendered with [Vega](https://github.com/trifacta/vega).
+They're designed for exploratory data analysis, so are relatively simple.

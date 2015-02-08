@@ -205,7 +205,7 @@ var Chart = React.createClass({
         return (<div>
           <div className='col12 pad2 contain'>
             <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
-            <div className='text-right'>
+            <div className='text-right hide-mobile'>
                 <a className='icon u-d-arrow pad2x' onClick={this.resize}>resize</a>
                 <a className='icon share' onClick={this.share}>save</a>
             </div>
