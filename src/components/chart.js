@@ -11,7 +11,7 @@ var Chart = React.createClass({
     });
   },
   getInitialState() {
-    return { events: EventStore.all() };
+    return { events: EventStore.all(), tooltip: '' };
   },
   resize() {
     var s = this.state;
@@ -24,8 +24,13 @@ var Chart = React.createClass({
           var c = chart({
               el: this.refs.chart.getDOMNode()
           }).update();
-          c.on('mouseover', function() {
-            // console.log(arguments);
+          c.on('mouseover', (e, d) => {
+            this.refs.tooltip.getDOMNode().innerHTML = d.datum.data.c + ': ' + d.datum.data.y +
+              ' on ' +
+              d3.time.format('%x')(new Date(d.datum.data.x));
+          });
+          c.on('mouseout', (e, d) => {
+            this.refs.tooltip.getDOMNode().innerHTML = '';
           });
       });
     }
@@ -197,8 +202,9 @@ var Chart = React.createClass({
   render() {
     if (this.state.events.length && this.makeSpec()) {
         return (<div>
-          <div className='col12 pad2'>
+          <div className='col12 pad2 contain'>
             <div ref='chart'></div>
+            <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
             <div className='text-right'>
                 <a className='icon u-d-arrow pad2x' onClick={this.resize}>resize</a>
                 <a className='icon share' onClick={this.share}>save</a>
