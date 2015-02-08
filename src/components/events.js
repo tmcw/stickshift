@@ -100,7 +100,7 @@ var Events = React.createClass({
       <div>
         <Chart width={this.state.width} />
         <div className='pad2 fill-grey keyline-top'>
-            <div className='col12 pad0 text-right'>
+            <div className='col12 pad0 space-bottom0 text-right'>
             <ExportTable />
             </div>
             <EventTable

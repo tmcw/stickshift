@@ -127,6 +127,7 @@ var Chart = React.createClass({
           "type": "x",
           "scale": "x",
           "format":"%x",
+          ticks: Math.floor(chartWidth / 100),
             tickSize: 0,
           properties: {
               labels: {
@@ -203,12 +204,12 @@ var Chart = React.createClass({
     if (this.state.events.length && this.makeSpec()) {
         return (<div>
           <div className='col12 pad2 contain'>
-            <div ref='chart'></div>
             <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
             <div className='text-right'>
                 <a className='icon u-d-arrow pad2x' onClick={this.resize}>resize</a>
                 <a className='icon share' onClick={this.share}>save</a>
             </div>
+            <div ref='chart'></div>
           </div>
         </div>);
     } else {
