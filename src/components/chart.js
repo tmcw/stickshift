@@ -73,14 +73,21 @@ var Chart = React.createClass({
         });
     }
     if (!datecolumn) return false;
-    var dateRange = d3.extent(dates);
-    var valueRange = d3.extent(yValues);
-    var dateScale = d3.time.scale().domain(dateRange);
-    var gap = 'month';
-    if ((dateRange[1] - dateRange[0]) / 2.62974e9 < events.length) gap = 'day';
-    var spaces = dateScale.ticks(d3.time[gap]).length;
-    var padding = {"top": 10, "left": 20, "bottom": 15, "right": 10};
+
+    var padding = {"top": 10, "left": 40, "bottom": 15, "right": 10};
     var chartWidth = this.props.width - padding.left - padding.right;
+
+    var dateRange = d3.extent(dates);
+    dates.sort(function(a, b) { return a - b; });
+    var gaps = [];
+    for (var i = 0; i < dates.length - 1; i++) {
+      gaps.push(dates[i + 1] - dates[i]);
+    }
+    // avoid gaps of 0
+    gaps = gaps.filter(function(_) { return _; });
+    var minGap = d3.min(gaps);
+    var barWidth = chartWidth / ((dateRange[1] - dateRange[0]) / minGap);
+
     return {
       "width": chartWidth,
       "height": this.state.tall ? window.innerHeight - padding.top - padding.bottom : 200,
@@ -105,7 +112,6 @@ var Chart = React.createClass({
       "scales": [{
           "name": "x",
           "type": "time",
-          nice: gap,
           clamp: true,
           "range": "width",
           "domain": {"data": "table", "field": "data.x"}
@@ -182,7 +188,7 @@ var Chart = React.createClass({
               "properties": {
                 "enter": {
                   "x": { "scale": "x", "field": "data.x" },
-                  "width": { value: chartWidth / spaces },
+                  "width": { value: barWidth },
                   "y": { "scale": "y", "field": "y" },
                   "y2": { "scale": "y", "field": "y2" },
                   "fill": {"scale": "color", "field": "data.c"}

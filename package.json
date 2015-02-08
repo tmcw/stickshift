@@ -22,7 +22,10 @@
       "brfs"
     ]
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concat-stream": "^1.4.7",
+    "sqlite3": "^3.0.4"
+  },
   "scripts": {
     "start": "watchify -d src/index.js -o bundle.js & st -nc"
   },
