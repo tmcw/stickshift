@@ -27,7 +27,7 @@
     "sqlite3": "^3.0.4"
   },
   "scripts": {
-    "start": "watchify -d src/index.js -o bundle.js & st -nc"
+    "start": "watchify -d src/index.js -o bundle.js & node example_server.js"
   },
   "author": "Tom MacWright",
   "license": "ISC"

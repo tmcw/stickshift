@@ -25,7 +25,7 @@ var Chart = React.createClass({
               el: this.refs.chart.getDOMNode()
           }).update();
           c.on('mouseover', (e, d) => {
-            this.refs.tooltip.getDOMNode().innerHTML = d.datum.data.c + ': ' + d.datum.data.y +
+            this.refs.tooltip.getDOMNode().innerHTML = d.datum.data.c + ' = ' + d.datum.data.y +
               ' on ' +
               d3.time.format('%x')(new Date(d.datum.data.x));
           });
@@ -86,7 +86,7 @@ var Chart = React.createClass({
     // avoid gaps of 0
     gaps = gaps.filter(function(_) { return _; });
     var minGap = d3.min(gaps);
-    var barWidth = chartWidth / ((dateRange[1] - dateRange[0]) / minGap);
+    var barWidth = Math.floor(chartWidth / ((dateRange[1] - dateRange[0]) / minGap)) - 2;
 
     return {
       "width": chartWidth,

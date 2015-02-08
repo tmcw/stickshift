@@ -6,11 +6,17 @@ var st = require('st');
 
 var mount = st({ path: __dirname, url: '/', cache: false });
 
+// Create fake data for the testing server, so that your queries show something.
 db.serialize(function() {
-  db.run('CREATE TABLE fake(x, y)');
-  for (var i = 0; i < 1000; i++) {
-    db.run('INSERT INTO fake VALUES (?, ?)', [
-      (new Date((+new Date() - (i * 1000 * 60 * 60)))).toString(), Math.random() * 1000]);
+  db.run('CREATE TABLE fake(x, y, z)');
+  for (var i = 0; i < 100; i++) {
+    // truly random data and totally sin-wave data looks weird, so we
+    // have a slowly-changing random offset
+    db.run('INSERT INTO fake VALUES (?, ?, ?)', [
+      (new Date((+new Date() - (i * 1000 * 60 * 60)))).toString(),
+      ((Math.sin(i/10) + 1) * 10) + Math.random() * 20,
+      ((Math.cos(i/5) + 1) * 40) + Math.random() * 5
+    ]);
   }
 });
 
@@ -21,7 +27,6 @@ var server = http.createServer(function(req, res) {
       try {
         var q = JSON.parse(query);
         db.all(q.query, function(err, rows) {
-          console.log(arguments);
           res.writeHead(200, {'Content-Type': 'application/json'});
           res.end(JSON.stringify(err || rows));
         });

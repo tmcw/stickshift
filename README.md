@@ -9,16 +9,17 @@ A clean & modern data interface.
 * **Share** and save queries
 * **Responsive** on lil' screens
 
-## Usage
+## Installation
 
-This is an app you can start with the `npm start` command. You'll need
-to copy [config.example.json](config.example.json) to `config.json`
-and configure it with a repository to use for query storage and an
-endpoint for queries.
-
-`stickshift` talks to your database through an HTTP interface: it doesn't include a
-node component, and isn't tied to a specific kind of SQL or place where it's
-hosted.
+* `npm install`
+* copy [config.example.json](config.example.json) to `config.json`
+  and configure it with a repository to use for query storage and an
+  endpoint for queries.
+* the example in [example_server.js](example_server.js) talks to SQLite,
+  but you can swap in Postgres/RedShift using the `pg` module,
+  MySQL using the `mysql` module, and so on. Or you can even just point
+  stickshift that accepts queries over POST and returns results as JSON
+* `npm start`
 
 ## Architecture
 
@@ -27,6 +28,16 @@ hosted.
 and [React-Router](https://github.com/rackt/react-router). It's written
 in CommonJS & ES6 and cross-compiled with [browserify](http://browserify.org/)
 & [6to5](https://6to5.org/). Query storage is powered by [hubdb](http://github.com/mapbox/hubdb).
+
+## Bring your own auth
+
+There's no user login system built into `stickshift`: like your choice of
+database, this is likely to be specific to your purpose, company, usage,
+and so on. Some common approaches include:
+
+* Running it locally or behind a firewall
+* Ditching `example_server.js` and integrating with a server that does
+  authentication, like through passport. This is what we do at Mapbox.
 
 ## Charts
 
