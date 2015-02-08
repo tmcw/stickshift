@@ -7,6 +7,7 @@ A clean & modern data interface.
 * **Export** query results to JSON & CSV
 * **Visualize** some query results automatically
 * **Share** and save queries
+* **Responsive** on lil' screens
 
 ## Usage
 
