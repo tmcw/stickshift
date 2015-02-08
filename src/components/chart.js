@@ -21,9 +21,12 @@ var Chart = React.createClass({
   drawChart() {
     if (this.state.events.length && this.makeSpec()) {
       vg.parse.spec(this.makeSpec(), chart => {
-          chart({
+          var c = chart({
               el: this.refs.chart.getDOMNode()
           }).update();
+          c.on('mouseover', function() {
+            // console.log(arguments);
+          });
       });
     }
   },
@@ -44,7 +47,7 @@ var Chart = React.createClass({
     var columns = Object.keys(this.state.events[0]);
     var events = JSON.parse(JSON.stringify(this.state.events));
     var datecolumn;
-    var values = [];
+    var values = [], dates = [], yValues = [];
     // parsing dates outside of vega will not work: vega does a json
     // stringify loop internally
     if (+new Date(events[0][columns[0]])) {
@@ -52,6 +55,8 @@ var Chart = React.createClass({
         events.forEach(function(e) {
             for (var i = 1; i < columns.length; i++) {
                 var parsed = parseFloat(e[columns[i]]);
+                dates.push(new Date(e[datecolumn]));
+                yValues.push(parsed);
                 if (!isNaN(parsed)) {
                     values.push({
                         x: e[columns[0]],
@@ -63,7 +68,13 @@ var Chart = React.createClass({
         });
     }
     if (!datecolumn) return false;
-    var padding = {"top": 10, "left": 100, "bottom": 30, "right": 10};
+    var dateRange = d3.extent(dates);
+    var valueRange = d3.extent(yValues);
+    var dateScale = d3.time.scale().domain(dateRange);
+    var gap = 'month';
+    if ((dateRange[1] - dateRange[0]) / 2.62974e9 < events.length) gap = 'day';
+    var spaces = dateScale.ticks(d3.time[gap]).length;
+    var padding = {"top": 10, "left": 20, "bottom": 15, "right": 10};
     var chartWidth = this.props.width - padding.left - padding.right;
     return {
       "width": chartWidth,
@@ -72,7 +83,9 @@ var Chart = React.createClass({
       "data": [
         {
           "name": "table",
-          "format":{type:'json', parse:{"x":"date"}},
+          "format": {type:'json', parse:
+            {"x":"date"}
+          },
           "values": values
         },
         {
@@ -84,29 +97,23 @@ var Chart = React.createClass({
           ]
         }
       ],
-      "scales": [
-        {
+      "scales": [{
           "name": "x",
           "type": "time",
+          nice: gap,
+          clamp: true,
           "range": "width",
           "domain": {"data": "table", "field": "data.x"}
-        },
-        {
-          "name": "xBands",
-          "type": "ordinal",
-          "range": "width",
-          "domain": {"data": "table", "field": "data.x"}
-        },
-        {
+        }, {
           "name": "y",
           "type": "linear",
           "range": "height",
           "nice": true,
           "domain": {"data": "stats", "field": "sum"}
-        },
-        {
+        }, {
           "name": "color",
           "type": "ordinal",
+          "domain": {"data": "table", "field": "data.c"},
           "range": ['#56b881','#3887be','#8a8acb','#ee8a65']
         }
       ],
@@ -128,6 +135,7 @@ var Chart = React.createClass({
         {
             "type": "y",
             tickSize: 0,
+            format: ',s',
             "scale": "y",
             properties: {
                 labels: {
@@ -138,6 +146,19 @@ var Chart = React.createClass({
                 }
             }
         }
+      ],
+      "legends": [
+    {
+      "fill": "color",
+      "title": "Species",
+      "offset": 0,
+      "properties": {
+        "symbols": {
+          "fillOpacity": {"value": 0.5},
+          "stroke": {"value": "transparent"}
+        }
+      }
+    }
       ],
       "marks": [
         {
@@ -155,7 +176,7 @@ var Chart = React.createClass({
               "properties": {
                 "enter": {
                   "x": { "scale": "x", "field": "data.x" },
-                  "width": { value: 0.5 * chartWidth / events.length },
+                  "width": { value: chartWidth / spaces },
                   "y": { "scale": "y", "field": "y" },
                   "y2": { "scale": "y", "field": "y2" },
                   "fill": {"scale": "color", "field": "data.c"}
