@@ -1,6 +1,9 @@
 # stickshift
 
-A clean & modern data interface.
+A clean & modern data interface: SQL queries into JSON, CSV, and charts,
+done simply.
+
+![](screenshot.png)
 
 ## Features
 
