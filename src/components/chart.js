@@ -19,8 +19,11 @@ var Chart = React.createClass({
     this.setState(s);
   },
   drawChart() {
+    this.refs.chart.getDOMNode().style.display = 'block';
     if (this.state.events.length && this.makeSpec()) {
+      console.log(JSON.stringify(this.makeSpec()));
       vg.parse.spec(this.makeSpec(), chart => {
+        try {
           var c = chart({
               el: this.refs.chart.getDOMNode()
           }).update();
@@ -32,12 +35,15 @@ var Chart = React.createClass({
           c.on('mouseout', (e, d) => {
             this.refs.tooltip.getDOMNode().innerHTML = '';
           });
+        } catch(e) {
+          this.refs.chart.getDOMNode().style.display = 'none';
+        }
       });
     }
   },
   share() {
     var a = document.createElement('a');
-    a.download = "chart.png";
+    a.download = 'chart.png';
     a.href = this.refs.chart.getDOMNode().getElementsByTagName('canvas')[0].toDataURL('image/png');
     a.click();
   },
@@ -48,13 +54,10 @@ var Chart = React.createClass({
     this.drawChart();
   },
   canChart() {
-    return (this.state.events.length &&
-      typeof this.state.events[0] === 'object');
+    return (this.state.events.length && typeof this.state.events[0] === 'object');
   },
   makeSpec() {
-    if (!this.canChart()) {
-      return {};
-    }
+    if (!this.canChart()) { return {}; }
     var columns = Object.keys(this.state.events[0]);
     var events = JSON.parse(JSON.stringify(this.state.events));
     var datecolumn;
@@ -62,25 +65,25 @@ var Chart = React.createClass({
     // parsing dates outside of vega will not work: vega does a json
     // stringify loop internally
     if (+new Date(events[0][columns[0]])) {
-        datecolumn = columns[0];
-        events.forEach(function(e) {
-            for (var i = 1; i < columns.length; i++) {
-                var parsed = parseFloat(e[columns[i]]);
-                dates.push(new Date(e[datecolumn]));
-                yValues.push(parsed);
-                if (!isNaN(parsed)) {
-                    values.push({
-                        x: e[columns[0]],
-                        y: parsed,
-                        c: columns[i]
-                    });
-                }
+      datecolumn = columns[0];
+      events.forEach(function(e) {
+        for (var i = 1; i < columns.length; i++) {
+          var parsed = parseFloat(e[columns[i]]);
+          dates.push(new Date(e[datecolumn]));
+          yValues.push(parsed);
+          if (!isNaN(parsed)) {
+              values.push({
+                x: e[columns[0]],
+                y: parsed,
+                c: columns[i]
+              });
             }
-        });
+        }
+      });
     }
     if (!datecolumn) return false;
 
-    var padding = {"top": 10, "left": 40, "bottom": 15, "right": 10};
+    var padding = {top: 10, left: 40, bottom: 15, right: 10};
     var chartWidth = this.props.width - padding.left - padding.right;
 
     var dateRange = d3.extent(dates);
@@ -92,125 +95,108 @@ var Chart = React.createClass({
     // avoid gaps of 0
     gaps = gaps.filter(function(_) { return _; });
     var minGap = d3.min(gaps);
-    var barWidth = Math.floor(chartWidth / ((dateRange[1] - dateRange[0]) / minGap)) - 2;
+    var barWidth = Math.max(1,
+      Math.floor(chartWidth / ((dateRange[1] - dateRange[0]) / minGap)) - 2);
 
-    return {
-      "width": chartWidth,
-      "height": this.state.tall ? window.innerHeight - padding.top - padding.bottom : 200,
-      "padding": padding,
-      "data": [
+    var chartConfig = {
+      width: chartWidth,
+      height: this.state.tall ? (window.innerHeight - padding.top - padding.bottom) * 0.75 : 200,
+      padding: padding,
+      data: [
         {
-          "name": "table",
-          "format": {type:'json', parse:
-            {"x":"date"}
+          name: 'table',
+          format: {type:'json', parse:
+            {x:'date'}
           },
-          "values": values
+          values: values
         },
         {
-          "name": "stats",
-          "source": "table",
-          "transform": [
-            {"type": "facet", "keys": ["data.x"]},
-            {"type": "stats", "value": "data.y"}
+          name: 'stats',
+          source: 'table',
+          transform: [
+            {type: 'facet', keys: ['data.x']},
+            {type: 'stats', value: 'data.y'}
           ]
         }
       ],
-      "scales": [{
-          "name": "x",
-          "type": "time",
-          clamp: true,
-          "range": "width",
-          "domain": {"data": "table", "field": "data.x"}
-        }, {
-          "name": "y",
-          "type": "linear",
-          "range": "height",
-          "nice": true,
-          "domain": {"data": "stats", "field": "sum"}
-        }, {
-          "name": "color",
-          "type": "ordinal",
-          "domain": {"data": "table", "field": "data.c"},
-          "range": ['#56b881','#3887be','#8a8acb','#ee8a65']
-        }
+      scales: [{
+        name: 'x',
+        type: 'time',
+        clamp: true,
+        range: 'width',
+        domain: {data: 'table', field: 'data.x'}
+      }, {
+        name: 'y',
+        type: 'linear',
+        range: 'height',
+        nice: true,
+        domain: {data: 'stats', field: 'sum'}
+      }, {
+        name: 'color',
+        type: 'ordinal',
+        domain: {data: 'table', field: 'data.c'},
+        range: ['#56b881','#3887be','#8a8acb','#ee8a65']
+      }
       ],
-      "axes": [
+      axes: [
         {
-          "type": "x",
-          "scale": "x",
-          "format":"%x",
+          type: 'x',
+          scale: 'x',
+          format:'%x',
           ticks: Math.floor(chartWidth / 100),
-            tickSize: 0,
+          tickSize: 0,
           properties: {
-              labels: {
-                  fill: {value:'#b3b3b1'}
-              },
-              "axis": {
-                 "stroke": {"value": '#b3b3b1'},
-              }
+            labels: {
+              fill: {value:'#b3b3b1'}
+            },
+            axis: {
+              stroke: {value: '#b3b3b1'},
+            }
           }
         },
         {
-            "type": "y",
-            tickSize: 0,
-            format: ',s',
-            "scale": "y",
-            properties: {
-                labels: {
-                    fill: {value:'#b3b3b1'}
-                },
-                "axis": {
-                   "stroke": {"value": '#b3b3b1'},
-                }
+          type: 'y',
+          tickSize: 0,
+          format: ',s',
+          scale: 'y',
+          properties: {
+            labels: {
+              fill: {value:'#b3b3b1'}
+            },
+            axis: {
+              stroke: {value: '#b3b3b1'},
             }
+          }
         }
       ],
-      "legends": [
-    {
-      "fill": "color",
-      "title": "Species",
-      "offset": 0,
-      "properties": {
-        "symbols": {
-          "fillOpacity": {"value": 0.5},
-          "stroke": {"value": "transparent"}
-        }
-      }
-    }
-      ],
-      "marks": [
+      marks: [
         {
-          "type": "group",
-          "from": {
-            "data": "table",
-            "transform": [
-              {"type": "facet", "keys": ["data.c"]},
-              {"type": "stack", "point": "data.x", "height": "data.y"}
+          type: 'group',
+          from: {
+            data: 'table',
+            transform: [
+              {type: 'facet', keys: ['data.c']},
+              {type: 'stack', point: 'data.x', height: 'data.y'}
             ]
           },
-          "marks": [
-            {
-              "type": "rect",
-              "properties": {
-                "enter": {
-                  "x": { "scale": "x", "field": "data.x" },
-                  "width": { value: barWidth },
-                  "y": { "scale": "y", "field": "y" },
-                  "y2": { "scale": "y", "field": "y2" },
-                  "fill": {"scale": "color", "field": "data.c"}
-                },
-                "update": {
-                  "fillOpacity": {"value": 1}
-                },
-                "hover": {
-                  "fillOpacity": {"value": 0.5}
-                }
-              }
+          marks: [{
+            type: 'rect',
+            properties: {
+              enter: {
+                x: { 'scale': 'x', field: 'data.x' },
+                width: { value: barWidth },
+                y: { scale: 'y', field: 'y' },
+                y2: { scale: 'y', field: 'y2' },
+                fill: { scale: 'color', field: 'data.c'}
+              },
+              update: { fillOpacity: {value: 1} },
+              hover: { fillOpacity: {value: 0.5} }
             }
-          ]
+          }]
         }
       ]
     };
+    return chartConfig;
   },
   render() {
     if (this.canChart()) {
