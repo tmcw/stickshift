@@ -19,8 +19,10 @@ var QueryList = React.createClass({
     },
     render() {
         return <div className='fill-navy-dark dark pad2'>
-          {this.state.queries.map(q =>
-              <div className='col12 clearfix contain pad0y'>
+          {this.state.queries.map((q, i) =>
+              <div
+                key={q.data.query + '-' + i}
+                className='col12 clearfix contain pad0y'>
                 <div className='col3 right pad1 fill-darken2'>
                   <a
                       onClick={this.chooseQuery.bind(this, q)}
