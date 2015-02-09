@@ -27,6 +27,29 @@ MySQL using the `mysql` module, and so on. Or you can even just point
 stickshift at any URL that accepts queries over POST and returns
 results as JSON.
 
+## Configuration
+
+Stickshift exposes a JavaScript API of the form:
+
+```js
+var Stickshift = require('stickshift');
+
+Stickshift(element, {
+    // the http(s) endpoint to POST queries to and get results back
+    endpoint: '',
+
+    // GitHub access_token, used for saving queries
+    token: '',
+    // GitHub username, repo, and branch for saving queries.
+    username: '',
+    repo: '',
+    branch: ''
+});
+```
+
+Calling `Stickshift` props up the full interface and router within the given
+element.
+
 ## Architecture
 
 `stickshift` is built with [React](http://facebook.github.io/react/),

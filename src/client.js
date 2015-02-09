@@ -1,10 +1,9 @@
 var xhr = require('xhr');
 var config = require('./config.js');
 var Hubdb = require('hubdb');
-var cookie = require('cookie');
 
 var db = new Hubdb({
-    token: cookie.parse(document.cookie).access_token,
+    token: config.access_token,
     branch: config.branch,
     username: config.username,
     repo: config.repo
