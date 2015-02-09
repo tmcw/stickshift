@@ -53,3 +53,8 @@ that
 
 These charts are rendered with [Vega](https://github.com/trifacta/vega).
 They're designed for exploratory data analysis, so are relatively simple.
+
+## Development
+
+* Run `npm run develop` to continously rebuild source and run stickshift
+  without a node server.
