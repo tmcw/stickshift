@@ -1,4 +1,4 @@
-var EventConstants = require('./constants/event_constants.js'),
+var RowConstants = require('./constants/row_constants.js'),
     QueryConstants = require('./constants/query_constants.js'),
     client = require('./client.js'),
     Dispatcher = require('./dispatcher.js');
@@ -32,12 +32,12 @@ var actions = {
 
   runQuery(query) {
     Dispatcher.handleViewAction({
-      actionType: EventConstants.QUERY_START
+      actionType: RowConstants.QUERY_START
     });
     client.runQuery(query, (err, res) => {
       if (!err) {
         Dispatcher.handleViewAction({
-          actionType: EventConstants.QUERY_DONE,
+          actionType: RowConstants.QUERY_DONE,
           value: res
         });
       }

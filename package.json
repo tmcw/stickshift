@@ -2,7 +2,7 @@
   "name": "stickshift",
   "version": "1.0.0",
   "description": "an SQL metrics interface",
-  "main": "index.js",
+  "main": "src/index.js",
   "dependencies": {
     "6to5ify": "^4.1.0",
     "fixed-data-table": "^0.1.0",
@@ -27,8 +27,8 @@
     "sqlite3": "^3.0.4"
   },
   "scripts": {
-    "start": "watchify -d src/index.js -o bundle.js & node example_server.js",
-    "develop": "watchify -d src/index.js -o bundle.js & st -nc"
+    "start": "watchify -d site.js -o bundle.js & node example_server.js",
+    "develop": "watchify -d site.js -o bundle.js & st -nc"
   },
   "author": "Tom MacWright",
   "license": "ISC"

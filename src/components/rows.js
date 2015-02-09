@@ -1,17 +1,17 @@
 var React = require('react');
 var Router = require('react-router');
 var { Navigation, State } = Router;
-var EventStore = require('../stores/event_store.js'),
+var RowStore = require('../stores/row_store.js'),
     QueryStore = require('../stores/query_store.js'),
     actions = require('../actions.js');
 
 var QueryList = require('./query_list.js'),
-    EventTable = require('./event_table.js'),
+    RowTable = require('./row_table.js'),
     ExportTable = require('./export_table.js'),
     Chart = require('./chart.js');
 
-var Events = React.createClass({
-  mixins: [EventStore.listenTo, State, Navigation],
+var Rows = React.createClass({
+  mixins: [RowStore.listenTo, State, Navigation],
   componentWillMount() {
       window.addEventListener('resize', this.measure);
   },
@@ -35,7 +35,7 @@ var Events = React.createClass({
     return {
       events: [],
       list: false,
-      query: 'select * from information_schema.tables',
+      query: '',
       width: 500
     };
   },
@@ -64,8 +64,8 @@ var Events = React.createClass({
   },
   _onChange: function() {
     this.setState({
-      events: EventStore.all(),
-      loading: EventStore.loading()
+      events: RowStore.all(),
+      loading: RowStore.loading()
     });
   },
   render: function() {
@@ -103,7 +103,7 @@ var Events = React.createClass({
             <div className='col12 pad0 space-bottom0 text-right hide-mobile'>
             <ExportTable />
             </div>
-            <EventTable
+            <RowTable
               width={this.state.width}
               events={this.state.events} />
         </div>
@@ -116,4 +116,4 @@ var Events = React.createClass({
   }
 });
 
-module.exports = Events;
+module.exports = Rows;

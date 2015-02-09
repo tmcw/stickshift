@@ -11,15 +11,21 @@ A clean & modern data interface.
 
 ## Installation
 
-* `npm install`
-* copy [config.example.json](config.example.json) to `config.json`
-  and configure it with a repository to use for query storage and an
-  endpoint for queries.
-* the example in [example_server.js](example_server.js) talks to SQLite,
-  but you can swap in Postgres/RedShift using the `pg` module,
-  MySQL using the `mysql` module, and so on. Or you can even just point
-  stickshift that accepts queries over POST and returns results as JSON
-* `npm start`
+To run the simple demo:
+
+```sh
+$ npm install
+$ npm start
+```
+
+Then you can configure the server by editing
+configuration in [server.js](server.js).
+
+The example in [example_server.js](example_server.js) talks to SQLite,
+but you can swap in Postgres/RedShift using the `pg` module,
+MySQL using the `mysql` module, and so on. Or you can even just point
+stickshift at any URL that accepts queries over POST and returns
+results as JSON.
 
 ## Architecture
 
@@ -53,8 +59,3 @@ that
 
 These charts are rendered with [Vega](https://github.com/trifacta/vega).
 They're designed for exploratory data analysis, so are relatively simple.
-
-## Development
-
-* Run `npm run develop` to continously rebuild source and run stickshift
-  without a node server.

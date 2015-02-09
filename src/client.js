@@ -1,5 +1,5 @@
 var xhr = require('xhr');
-var config = require('../config.json');
+var config = require('./config.js');
 var Hubdb = require('hubdb');
 var cookie = require('cookie');
 

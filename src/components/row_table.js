@@ -5,7 +5,7 @@ var FixedDataTable = require('fixed-data-table');
 var Table = FixedDataTable.Table;
 var Column = FixedDataTable.Column;
 
-var EventTable = React.createClass({
+var RowTable = React.createClass({
   rowGetter(rowIndex) {
     return this.props.events[rowIndex];
   },
@@ -36,4 +36,4 @@ var EventTable = React.createClass({
   }
 });
 
-module.exports = EventTable;
+module.exports = RowTable;

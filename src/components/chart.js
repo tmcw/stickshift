@@ -1,17 +1,17 @@
 Object.assign = require('object-assign');
 
-var EventStore = require('../stores/event_store.js');
+var RowStore = require('../stores/row_store.js');
 var React = require('react');
 
 var Chart = React.createClass({
-  mixins: [EventStore.listenTo],
+  mixins: [RowStore.listenTo],
   _onChange: function() {
     this.setState({
-      events: EventStore.all()
+      events: RowStore.all()
     });
   },
   getInitialState() {
-    return { events: EventStore.all(), tooltip: '' };
+    return { events: RowStore.all(), tooltip: '' };
   },
   resize() {
     var s = this.state;
@@ -47,8 +47,14 @@ var Chart = React.createClass({
   componentDidMount() {
     this.drawChart();
   },
+  canChart() {
+    return (this.state.events.length &&
+      typeof this.state.events[0] === 'object');
+  },
   makeSpec() {
-    if (!this.state.events.length) return {};
+    if (!this.canChart()) {
+      return {};
+    }
     var columns = Object.keys(this.state.events[0]);
     var events = JSON.parse(JSON.stringify(this.state.events));
     var datecolumn;
@@ -207,13 +213,15 @@ var Chart = React.createClass({
     };
   },
   render() {
-    if (this.state.events.length && this.makeSpec()) {
+    if (this.canChart()) {
         return (<div>
           <div className='col12 pad2 contain'>
             <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
             <div className='text-right hide-mobile'>
-                <a className='icon u-d-arrow pad2x' onClick={this.resize}>resize</a>
-                <a className='icon share' onClick={this.share}>save</a>
+                <a className='icon u-d-arrow pad2x'
+                  onClick={this.resize}>resize</a>
+                <a className='icon share'
+                  onClick={this.share}>save</a>
             </div>
             <div ref='chart'></div>
           </div>
