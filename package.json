@@ -1,6 +1,6 @@
 {
   "name": "stickshift",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "an SQL metrics interface",
   "main": "src/index.js",
   "dependencies": {
