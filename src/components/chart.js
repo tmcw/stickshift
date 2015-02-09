@@ -19,9 +19,10 @@ var Chart = React.createClass({
     this.setState(s);
   },
   drawChart() {
+    if (!this.isMounted() || !this.refs.chart) return;
+
     this.refs.chart.getDOMNode().style.display = 'block';
     if (this.state.events.length && this.makeSpec()) {
-      console.log(JSON.stringify(this.makeSpec()));
       vg.parse.spec(this.makeSpec(), chart => {
         try {
           var c = chart({
