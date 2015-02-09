@@ -35,7 +35,7 @@ var actions = {
       actionType: RowConstants.QUERY_START
     });
     client.runQuery(query, (err, res) => {
-      if (!err) {
+      if (!err && res) {
         Dispatcher.handleViewAction({
           actionType: RowConstants.QUERY_DONE,
           value: res
