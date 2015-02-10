@@ -61,6 +61,13 @@ and [React-Router](https://github.com/rackt/react-router). It's written
 in CommonJS & ES6 and cross-compiled with [browserify](http://browserify.org/)
 & [6to5](https://6to5.org/). Query storage is powered by [hubdb](http://github.com/mapbox/hubdb).
 
+Structure:
+
+* `src/components`: UI components, like the chart, table, and query interface
+* `src/stores`: Flux stores for saved queries & transient table information
+* `src/constants`: Constants for actions, like 'received table results'
+* `lib/` d3 & vega, for now, until [vega builds are sorted](https://github.com/trifacta/vega/issues/235)
+
 ## Bring your own auth
 
 There's no user login system built into `stickshift`: like your choice of
