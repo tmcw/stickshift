@@ -22,7 +22,7 @@ $ npm start
 ```
 
 Then you can configure the server by editing
-configuration in [server.js](server.js).
+configuration in [site.js](site.js).
 
 The example in [example_server.js](example_server.js) talks to SQLite,
 but you can swap in Postgres/RedShift using the `pg` module,
