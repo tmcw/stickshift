@@ -1,6 +1,5 @@
 var Dispatcher = require('../dispatcher.js'),
   RowConstants = require('../constants/row_constants.js'),
-  Immutable = require('immutable'),
   makeStore = require('../make_store.js');
 
 var _results = [];
