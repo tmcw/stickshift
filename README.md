@@ -97,3 +97,7 @@ They're designed for exploratory data analysis, so are relatively simple.
 
 * Run `npm run develop` to continously rebuild source and run stickshift
   without a node server.
+
+## See Also
+
+* [re:dash](https://github.com/EverythingMe/redash) is a similar open source project
