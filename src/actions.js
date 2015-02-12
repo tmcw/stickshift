@@ -12,6 +12,11 @@ var actions = {
             value: res
           });
           if (callback) callback();
+        } else {
+          Dispatcher.handleViewAction({
+            actionType: QueryConstants.QUERY_ERROR,
+            value: err
+          });
         }
     });
   },

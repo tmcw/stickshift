@@ -3,9 +3,11 @@ var Dispatcher = require('../dispatcher.js'),
   makeStore = require('../make_store.js');
 
 var _results = [];
+var _error = null;
 
 var QueryStore = makeStore({
   all: () => _results,
+  error: () => _error,
   getByPath: (path) => {
     var r = _results.filter(r => r.path === path);
     if (r.length) return r[0];
@@ -15,6 +17,10 @@ var QueryStore = makeStore({
     switch (action.actionType) {
       case QueryConstants.QUERY_LISTED:
         _results = action.value;
+        break;
+      case QueryConstants.QUERY_ERROR:
+        _results = [];
+        _error = action.value;
         break;
       default:
         return true;
