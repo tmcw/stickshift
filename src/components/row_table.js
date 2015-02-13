@@ -1,4 +1,3 @@
-var QueryStore = require('../stores/query_store.js');
 var React = require('react');
 
 var FixedDataTable = require('fixed-data-table');

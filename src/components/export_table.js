@@ -1,14 +1,14 @@
 var React = require('react');
-var EventStore = require('../stores/query_store.js');
+var RowStore = require('../stores/row_store.js');
 var dsv = require('dsv');
 var saveAs = require('filesaver.js');
 
 var ExportTable = React.createClass({
   exportCSV() {
-    saveAs(new Blob([dsv.csv.format(EventStore.all())], {type: "text/plain;charset=utf-8"}), 'results.csv');
+    saveAs(new Blob([dsv.csv.format(RowStore.all())], {type: 'text/plain;charset=utf-8'}), 'results.csv');
   },
   exportJSON() {
-    saveAs(new Blob([EventStore.all()], {type: "text/plain;charset=utf-8"}), 'results.json');
+    saveAs(new Blob([RowStore.all()], {type: 'text/plain;charset=utf-8'}), 'results.json');
   },
   render() {
     return (
