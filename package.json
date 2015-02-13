@@ -36,5 +36,9 @@
     "develop": "watchify -d site.js -o bundle.js & st -nc"
   },
   "author": "Tom MacWright",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mapbox/stickshift.git"
+  }
 }
