@@ -8,7 +8,7 @@ module.exports = function(element, inputConfig) {
   var React = require('react');
   var Router = require('react-router');
   var { Route, DefaultRoute, RouteHandler } = Router;
-  var Events = require('./components/rows.js');
+  var Rows = require('./components/rows.js');
 
   var App = React.createClass({
     render: function () {
@@ -22,8 +22,8 @@ module.exports = function(element, inputConfig) {
 
   var routes = (
     <Route handler={App} path='/'>
-      <DefaultRoute handler={Events} />
-      <Route name='permalink' path='/query/:query' handler={Events} />
+      <DefaultRoute handler={Rows} />
+      <Route name='permalink' path='/query/:query' handler={Rows} />
     </Route>
   );
 

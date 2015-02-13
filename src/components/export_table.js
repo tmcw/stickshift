@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var RowStore = require('../stores/row_store.js');
 var dsv = require('dsv');
 var saveAs = require('filesaver.js');

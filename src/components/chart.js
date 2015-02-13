@@ -1,10 +1,11 @@
 Object.assign = require('object-assign');
 
 var RowStore = require('../stores/row_store.js');
-var React = require('react');
+var xtend = require('xtend');
+var React = require('react/addons');
 
 var Chart = React.createClass({
-  mixins: [RowStore.listenTo],
+  mixins: [RowStore.listenTo, React.addons.PureRenderMixin],
   _onChange: function() {
     this.setState({
       events: RowStore.all()
@@ -14,9 +15,7 @@ var Chart = React.createClass({
     return { events: RowStore.all(), tooltip: '' };
   },
   resize() {
-    var s = this.state;
-    s.tall = !s.tall;
-    this.setState(s);
+    this.setState(xtend(this.state, { tall: !this.state.tall }));
   },
   drawChart() {
     if (!this.isMounted() || !this.refs.chart) return;

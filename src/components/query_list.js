@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var actions = require('../actions');
 var { Navigation } = require('react-router');
 var QueryStore = require('../stores/query_store.js');

@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var Router = require('react-router');
 var { Navigation, State } = Router;
 var RowStore = require('../stores/row_store.js'),
@@ -33,7 +33,6 @@ var Rows = React.createClass({
   },
   getInitialState() {
     return {
-      events: [],
       list: false,
       query: '',
       width: 500
@@ -64,7 +63,6 @@ var Rows = React.createClass({
   },
   _onChange: function() {
     this.setState({
-      events: RowStore.all(),
       loading: RowStore.loading()
     });
   },
@@ -101,11 +99,9 @@ var Rows = React.createClass({
         <Chart width={this.state.width} />
         <div className='pad2 fill-grey keyline-top'>
             <div className='col12 pad0 space-bottom0 text-right hide-mobile'>
-            <ExportTable />
+              <ExportTable />
             </div>
-            <RowTable
-              width={this.state.width}
-              events={this.state.events} />
+            <RowTable width={this.state.width} />
         </div>
       </div>
       {this.state.loading ?
