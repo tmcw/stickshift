@@ -1,12 +1,18 @@
 {
   "name": "stickshift",
-  "version": "1.1.1",
   "description": "an SQL metrics interface",
-  "main": "src/index.js",
+  "version": "1.1.1",
+  "author": "Tom MacWright",
+  "browserify": {
+    "transform": [
+      "6to5ify",
+      "brfs"
+    ]
+  },
   "dependencies": {
     "6to5ify": "^4.1.0",
     "brfs": "^1.3.0",
-    "browserify": "^8.1.3",
+    "browserify": "^9.0.3",
     "cookie": "^0.1.2",
     "dsv": "^0.0.4",
     "filesaver.js": "^0.1.1",
@@ -20,25 +26,27 @@
     "xhr": "^2.0.1",
     "xtend": "^4.0.0"
   },
-  "browserify": {
-    "transform": [
-      "6to5ify",
-      "brfs"
-    ]
-  },
   "devDependencies": {
     "concat-stream": "^1.4.7",
-    "watchify": "^2.3.0",
-    "sqlite3": "^3.0.4"
+    "sqlite3": "^3.0.4",
+    "watchify": "^2.3.0"
   },
-  "scripts": {
-    "start": "watchify -d site.js -o bundle.js & node example_server.js",
-    "develop": "watchify -d site.js -o bundle.js & st -nc"
-  },
-  "author": "Tom MacWright",
+  "keywords": [
+    "analysis",
+    "charts",
+    "data",
+    "react",
+    "sql",
+    "vega"
+  ],
   "license": "ISC",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:mapbox/stickshift.git"
+  },
+  "scripts": {
+    "develop": "watchify -d site.js -o bundle.js & st -nc",
+    "start": "watchify -d site.js -o bundle.js & node example_server.js"
   }
 }
