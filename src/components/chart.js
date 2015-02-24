@@ -1,9 +1,10 @@
 Object.assign = require('object-assign');
 
 var RowStore = require('../stores/row_store.js');
+var RoundedToggle = require('./rounded_toggle.js');
 var xtend = require('xtend');
 var React = require('react/addons');
-var stackedBarChart = require('../charts/stacked_bar.js');
+var charts = require('../charts/index.js');
 
 /**
  * A chart of current data.
@@ -16,7 +17,7 @@ var Chart = React.createClass({
     });
   },
   getInitialState() {
-    return { events: RowStore.all(), tooltip: '' };
+    return { events: RowStore.all(), tooltip: '', chartType: 'stacked' };
   },
   resize() {
     this.setState(xtend(this.state, { tall: !this.state.tall }));
@@ -41,6 +42,7 @@ var Chart = React.createClass({
           });
         } catch(e) {
           this.refs.chart.getDOMNode().style.display = 'none';
+          console.error(e);
         }
       });
     }
@@ -60,23 +62,38 @@ var Chart = React.createClass({
   canChart() {
     return (this.state.events.length && typeof this.state.events[0] === 'object');
   },
+  setChartType(type) {
+    this.setState({ chartType: type });
+  },
   makeSpec() {
     if (!this.canChart()) { return {}; }
-    return stackedBarChart(this.state.events, this.props.width, this.state.tall);
+    return charts[this.state.chartType](this.state.events, this.props.width, this.state.tall);
   },
   render() {
     if (this.canChart()) {
         return (<div>
-          <div className='col12 pad2 contain'>
-            <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
-            <div className='text-right hide-mobile'>
+          <div className='col12 pad2x pad1y contain clearfix'>
+            <div className='col12 clearfix'>
+              <div className='col6'>
+                <RoundedToggle
+                    className='inline'
+                    options={[
+                      { key: 'stacked', value: 'stacked' },
+                      { key: 'line', value: 'line' }
+                    ]}
+                    active={this.state.chartType}
+                    update={this.setChartType} />
+              </div>
+              <div className='col6 text-right hide-mobile pad1y'>
                 <a className='icon u-d-arrow pad2x'
                   onClick={this.resize}>resize</a>
                 <a className='icon share'
                   onClick={this.share}>save</a>
+              </div>
             </div>
-            <div ref='chart'></div>
+            <div ref='tooltip' className='pin-top pad0y center fill-lighten0'></div>
           </div>
+          <div ref='chart'></div>
         </div>);
     } else {
         return <div></div>;
