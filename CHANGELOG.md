@@ -1,3 +1,7 @@
+# 1.2.0
+
+* Add line charts and modularity of chart types
+
 # 1.1.1
 
 * Fixed JSON & CSV export
