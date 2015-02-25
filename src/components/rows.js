@@ -1,5 +1,6 @@
 var React = require('react/addons');
 var Router = require('react-router');
+var DocumentTitle = require('react-document-title');
 var { Navigation, State } = Router;
 var RowStore = require('../stores/row_store.js'),
     QueryStore = require('../stores/query_store.js'),
@@ -39,7 +40,7 @@ var Rows = React.createClass({
     };
   },
   setQuery(e) {
-    this.setState({ query: e.target.value });
+    this.setState({ query: e.target.value, queryName: '' });
   },
   runQuery() {
     actions.runQuery(this.state.query);
@@ -47,6 +48,7 @@ var Rows = React.createClass({
   saveQuery() {
     var name = prompt('Name this query');
     actions.saveQuery(name, this.state.query);
+    this.setState({ queryName: name });
   },
   listQueries() {
     actions.listQueries();
@@ -55,7 +57,8 @@ var Rows = React.createClass({
   chooseQuery: function(q) {
     this.setState({
       list: false,
-      query: q.data.query
+      query: q.data.query,
+      queryName: q.data.name
     }, () => {
         this.runQuery();
         this.transitionTo('permalink', { query: q.path });
@@ -67,48 +70,53 @@ var Rows = React.createClass({
     });
   },
   render: function() {
-    return <div className='unlimiter'>
-      {this.state.list ? <QueryList chooseQuery={this.chooseQuery} /> : ''}
-      <div className='pad2y fill-navy-dark dark pad2x'>
-        <div className='col12 truncate space-bottom1'>
-          <div className='contain'>
-            <strong>Query</strong>
-            <div className='pin-topright'>
-              <a
-                onClick={this.listQueries}
-                className='icon menu pad2x'>List</a>
-              <a
-                onClick={this.saveQuery}
-                className='icon floppy'>Save</a>
+    return <DocumentTitle title={'Stickshift' +
+      (this.state.queryName ?  `: ${this.state.queryName}` : '')}>
+      <div className='unlimiter'>
+        {this.state.list ? <QueryList chooseQuery={this.chooseQuery} /> : ''}
+        <div className='pad2y fill-navy-dark dark pad2x'>
+          <div className='col12 truncate space-bottom1'>
+            <div className='contain'>
+              <strong>Query</strong>
+              {this.state.queryName ?
+                <strong className='pad2x quiet code'>{this.state.queryName}</strong> : ''}
+              <div className='pin-topright'>
+                <a
+                  onClick={this.listQueries}
+                  className='icon menu pad2x'>List</a>
+                <a
+                  onClick={this.saveQuery}
+                  className='icon floppy'>Save</a>
+              </div>
             </div>
           </div>
+          <textarea
+            value={this.state.query}
+            className='col12 pad1 row2 code'
+            onChange={this.setQuery} />
+          <a
+            onClick={this.runQuery}
+            className='col12 unround fill-green button'>Query</a>
         </div>
-        <textarea
-          value={this.state.query}
-          className='col12 pad1 row2 code'
-          onChange={this.setQuery} />
-        <a
-          onClick={this.runQuery}
-          className='col12 unround fill-green button'>Query</a>
-      </div>
-      <div className='col12 pad2x'>
-        <div ref='tablesizer'>
+        <div className='col12 pad2x'>
+          <div ref='tablesizer'>
+          </div>
         </div>
-      </div>
-      <div>
-        <Chart width={this.state.width} />
-        <div className='pad2 fill-grey keyline-top'>
-            <div className='col12 pad0 space-bottom0 text-right hide-mobile'>
-              <ExportTable />
-            </div>
-            <RowTable width={this.state.width} />
+        <div>
+          <Chart width={this.state.width} />
+          <div className='pad2 fill-grey keyline-top'>
+              <div className='col12 pad0 space-bottom0 text-right hide-mobile'>
+                <ExportTable />
+              </div>
+              <RowTable width={this.state.width} />
+          </div>
         </div>
+        {this.state.loading ?
+          <div className='pin-bottom'>
+            <div className='pad1 fill-yellow'>Loading...</div>
+          </div> : ''}
       </div>
-      {this.state.loading ?
-        <div className='pin-bottom'>
-          <div className='pad1 fill-yellow'>Loading...</div>
-        </div> : ''}
-    </div>;
+    </DocumentTitle>;
   }
 });
 

@@ -1,3 +1,7 @@
+# 1.3.0
+
+* Show query name in UI
+
 # 1.2.0
 
 * Add line charts and modularity of chart types
