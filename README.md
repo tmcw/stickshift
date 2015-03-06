@@ -21,8 +21,22 @@ $ npm install
 $ npm start
 ```
 
-Then you can configure the server by editing
-configuration in [site.js](site.js).
+Open up `http://localhost:3000/` and play around: the testing server
+creates two tables:
+
+**`fake`: random time-series data**
+
+```sql
+select * from fake;
+```
+
+**`cats`: random categorical data**
+
+```sql
+select * from cats;
+```
+
+Then you can configure the server by editing configuration in [site.js](site.js).
 
 The example in [example_server.js](example_server.js) talks to SQLite,
 but you can swap in Postgres/RedShift using the `pg` module,
@@ -102,7 +116,7 @@ They're designed for exploratory data analysis, so are relatively simple.
 
 ## Development
 
-* Run `npm run develop` to continously rebuild source and run stickshift
+* Run `npm run develop` to continously rebuild source and run Stickshift
   without a node server.
 
 ## See Also
