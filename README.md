@@ -73,7 +73,7 @@ element.
 [Flux](https://facebook.github.io/flux/),
 and [React-Router](https://github.com/rackt/react-router). It's written
 in CommonJS & ES6 and cross-compiled with [browserify](http://browserify.org/)
-& [6to5](https://6to5.org/). Query storage is powered by [hubdb](http://github.com/mapbox/hubdb).
+& [babelify](http://babeljs.io/). Query storage is powered by [hubdb](http://github.com/mapbox/hubdb).
 
 Structure:
 
