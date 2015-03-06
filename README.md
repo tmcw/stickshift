@@ -84,11 +84,18 @@ that should not have permissions to modify data.
 
 ## Charts
 
-`stickshift` automatically creates charts for applicable queries: those
+Stickshift automatically creates charts for applicable queries: those
 that
 
-* Have a column parseable as dates
-* Have at least one other column of numbers
+* Have at least one column that is parseable as numbers.
+
+The supported chart types are:
+
+* **Time series**
+  * Lines
+  * Stacked bars
+* **Categorical**
+  * Grouped bars
 
 These charts are rendered with [Vega](https://github.com/trifacta/vega).
 They're designed for exploratory data analysis, so are relatively simple.

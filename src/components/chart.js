@@ -1,3 +1,4 @@
+/*global vg*/
 Object.assign = require('object-assign');
 
 var RowStore = require('../stores/row_store.js');
@@ -27,17 +28,16 @@ var Chart = React.createClass({
 
     this.refs.chart.getDOMNode().style.display = 'block';
     if (this.state.events.length && this.makeSpec()) {
-      vg.parse.spec(this.makeSpec(), chart => {
+      var { spec, tip } = this.makeSpec();
+      vg.parse.spec(spec, chart => {
         try {
           var c = chart({
               el: this.refs.chart.getDOMNode()
           }).update();
           c.on('mouseover', (e, d) => {
-            this.refs.tooltip.getDOMNode().innerHTML = d.datum.data.c + ' = ' + d.datum.data.y +
-              ' on ' +
-              d3.time.format('%x')(new Date(d.datum.data.x));
+            this.refs.tooltip.getDOMNode().innerHTML = tip(d.datum.data);
           });
-          c.on('mouseout', (e, d) => {
+          c.on('mouseout', () => {
             this.refs.tooltip.getDOMNode().innerHTML = '';
           });
         } catch(e) {

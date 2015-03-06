@@ -1,3 +1,4 @@
+/*global d3*/
 module.exports = function stackedBar(events, width, tall) {
   var padding = {top: 10, left: 40, bottom: 15, right: 10};
 
@@ -27,7 +28,7 @@ module.exports = function stackedBar(events, width, tall) {
     }
   });
 
-  return {
+  var spec = {
     width: chartWidth,
     height: chartHeight,
     padding: padding,
@@ -67,7 +68,7 @@ module.exports = function stackedBar(events, width, tall) {
           fill: {value:'#b3b3b1'}
         },
         axis: {
-          stroke: {value: '#b3b3b1'},
+          stroke: {value: '#b3b3b1'}
         }
       }
     }, {
@@ -95,12 +96,19 @@ module.exports = function stackedBar(events, width, tall) {
               x: { 'scale': 'x', field: 'data.x' },
               y: { scale: 'y', field: 'data.y' },
               stroke: { scale: 'color', field: 'data.c'},
-              strokeWidth: {"value": 2}
+              strokeWidth: { value: 2 }
             },
             update: { fillOpacity: {value: 1} },
             hover: { fillOpacity: {value: 0.5} }
           }
         }]
     }]
+  };
+
+  return {
+    spec: spec,
+    tip: function(d) {
+      return `${d.c} = ${d.y} on ${d3.time.format('%x')(new Date(d.x))}`;
+    }
   };
 };
