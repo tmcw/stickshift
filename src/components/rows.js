@@ -1,6 +1,8 @@
 var React = require('react/addons');
 var Router = require('react-router');
 var DocumentTitle = require('react-document-title');
+var ReactCodeMirror = require('react-code-mirror');
+require('codemirror/mode/sql/sql.js');
 var { Navigation, State } = Router;
 var RowStore = require('../stores/row_store.js'),
     QueryStore = require('../stores/query_store.js'),
@@ -14,22 +16,22 @@ var QueryList = require('./query_list.js'),
 var Rows = React.createClass({
   mixins: [RowStore.listenTo, State, Navigation],
   componentWillMount() {
-      window.addEventListener('resize', this.measure);
+    window.addEventListener('resize', this.measure);
   },
   componentWillUnmount() {
-      window.removeEventListener('resize', this.measure);
+    window.removeEventListener('resize', this.measure);
   },
   componentDidMount() {
-      this.measure();
-      if (this.getParams().query) {
-        actions.listQueries(() => {
-          this.chooseQuery(QueryStore.getByPath(this.getParams().query));
-        });
-      }
+    this.measure();
+    if (this.getParams().query) {
+      actions.listQueries(() => {
+        this.chooseQuery(QueryStore.getByPath(this.getParams().query));
+      });
+    }
   },
   measure() {
     this.setState({
-        width: this.refs.tablesizer.getDOMNode().offsetWidth
+      width: this.refs.tablesizer.getDOMNode().offsetWidth
     });
   },
   getInitialState() {
@@ -90,10 +92,14 @@ var Rows = React.createClass({
               </div>
             </div>
           </div>
-          <textarea
-            value={this.state.query}
-            className='col12 pad1 row2 code'
-            onChange={this.setQuery} />
+          <div className='col12 row2'>
+            <ReactCodeMirror
+              style={{height:80}}
+              value={this.state.query}
+              mode='text/x-sql'
+              theme='vibrant-ink'
+              onChange={this.setQuery} />
+          </div>
           <a
             onClick={this.runQuery}
             className='col12 unround fill-green button'>Query</a>
