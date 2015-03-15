@@ -122,3 +122,4 @@ They're designed for exploratory data analysis, so are relatively simple.
 ## See Also
 
 * [re:dash](https://github.com/EverythingMe/redash) is a similar open source project
+* [airpal](https://github.com/airbnb/airpal) is similar but works with Presto instead of SQL servers
