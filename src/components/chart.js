@@ -79,7 +79,8 @@ var Chart = React.createClass({
                     className='inline'
                     options={[
                       { key: 'stacked', value: 'stacked' },
-                      { key: 'line', value: 'line' }
+                      { key: 'line', value: 'line' },
+                      { key: 'map', value: 'map' }
                     ]}
                     active={this.state.chartType}
                     update={this.setChartType} />
