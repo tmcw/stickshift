@@ -22,7 +22,7 @@ $ npm start
 ```
 
 Open up `http://localhost:3000/` and play around: the testing server
-creates two tables:
+creates three tables:
 
 **`fake`: random time-series data**
 
@@ -34,6 +34,12 @@ select * from fake;
 
 ```sql
 select * from cats;
+```
+
+**`places`: points in france**
+
+```sql
+select * from points;
 ```
 
 Then you can configure the server by editing configuration in [site.js](site.js).
