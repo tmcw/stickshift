@@ -7,6 +7,58 @@ var xtend = require('xtend');
 var React = require('react/addons');
 var charts = require('../charts/index.js');
 
+function isLat(f) { return !!f.match(/(Lat)(itude)?/gi); }
+function isLon(f) { return !!f.match(/(L)(on|ng)(gitude)?/i); }
+
+function drawMap(element, events) {
+  var map = L.mapbox.map(element, 'tmcw.l12c66f2', {
+    scrollWheelZoom: false
+  }).fitBounds([
+    [-90, -180],
+    [90, 180]
+  ]);
+  var latfield, lonfield;
+  for (var f in events[0]) {
+    if (!latfield && isLat(f)) latfield = f;
+    if (!lonfield && isLon(f)) lonfield = f;
+  }
+  if (latfield && lonfield) {
+    var geojson = {
+      type: 'FeatureCollection',
+      features: events
+        .map(event => {
+          event[lonfield] = parseFloat(event[lonfield]);
+          event[latfield] = parseFloat(event[latfield]);
+          return event;
+        })
+        .filter(event => {
+          return !(isNaN(event[latfield]) || isNaN(event[lonfield]));
+        })
+        .map(event => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [parseFloat(event[lonfield]), parseFloat(event[latfield])]
+        },
+        properties: event
+      }))
+    };
+    L.geoJson(geojson, {
+      pointToLayer: (geojson, latlng) =>
+        L.circleMarker(latlng, {
+          radius: 7,
+          weight: 1,
+          opacity: 0.9,
+          fillOpacity: 0.6,
+          color: '#56b881',
+          fillColor: '#56b881'
+        }).bindPopup('<pre>' + JSON.stringify(geojson.properties, null, 2) + '</pre>', {
+          minWidth: 400
+        })
+      }).addTo(map);
+  }
+}
+
 /**
  * A chart of current data.
  */
@@ -26,6 +78,18 @@ var Chart = React.createClass({
   drawChart() {
     if (!this.isMounted() || !this.refs.chart) return;
 
+    this.refs.chart.getDOMNode().innerHTML = '';
+
+    if (this.state.chartType === 'map') {
+      var mapContainer = this.refs.chart.getDOMNode().appendChild(
+        document.createElement('div'));
+      mapContainer.style.display = 'block';
+      mapContainer.style.height = '600px';
+      drawMap(mapContainer, this.state.events);
+      return;
+    }
+
+    this.refs.chart.getDOMNode().style.height = 'auto';
     this.refs.chart.getDOMNode().style.display = 'block';
     if (this.state.events.length && this.makeSpec()) {
       var { spec, tip } = this.makeSpec();
@@ -79,7 +143,8 @@ var Chart = React.createClass({
                     className='inline'
                     options={[
                       { key: 'stacked', value: 'stacked' },
-                      { key: 'line', value: 'line' }
+                      { key: 'line', value: 'line' },
+                      { key: 'map', value: 'map' }
                     ]}
                     active={this.state.chartType}
                     update={this.setChartType} />

@@ -8,5 +8,6 @@ Stickshift(
     branch: 'db',
     username: 'mapbox',
     access_token: cookie.parse(document.cookie).access_token,
+    mapboxToken: 'pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ',
     repo: 'stickshift'
   });

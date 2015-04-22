@@ -59,6 +59,8 @@ Stickshift(element, {
     token: '',
     // GitHub username, repo, and branch for saving queries.
     username: '',
+    // Mapbox public token for maps
+    mapboxToken: '',
     repo: '',
     branch: ''
 });
@@ -110,9 +112,14 @@ The supported chart types are:
   * Stacked bars
 * **Categorical**
   * Grouped bars
+* **Geographical**
+  * Points
 
 These charts are rendered with [Vega](https://github.com/trifacta/vega).
 They're designed for exploratory data analysis, so are relatively simple.
+
+Maps are rendered by [Mapbox.js](https://www.mapbox.com/mapbox.js/) with
+[Mapbox](https://www.mapbox.com/) tiles.
 
 ## Development
 

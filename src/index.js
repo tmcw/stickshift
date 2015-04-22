@@ -4,6 +4,7 @@ module.exports = function(element, inputConfig) {
 
   var config = require('./config.js');
   Object.assign(config, inputConfig);
+  L.mapbox.accessToken = config.mapboxToken;
 
   var React = require('react');
   var Router = require('react-router');
