@@ -50,6 +50,7 @@
   },
   "scripts": {
     "develop": "watchify -d site.js -o bundle.js & st -nc",
-    "start": "watchify -d site.js -o bundle.js & node example_server.js"
+    "start": "watchify -d site.js -o bundle.js & node example_server.js",
+    "build-module": "browserify -s stickshift src/index.js > stickshift.js"
   }
 }
