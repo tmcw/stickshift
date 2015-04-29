@@ -14,7 +14,8 @@ done simply.
 
 ## Installation
 
-To run the simple demo:
+This project is meant to be run as a server. See [Stickshift.app](https://github.com/mapbox/stickshift-app) for a
+version that works as a desktop application.
 
 ```sh
 $ npm install
