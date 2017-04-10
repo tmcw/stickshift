@@ -1,5 +1,7 @@
 # stickshift
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tmcw/stickshift.svg)](https://greenkeeper.io/)
+
 A clean & modern data interface: SQL queries into JSON, CSV, and charts,
 done simply.
 
